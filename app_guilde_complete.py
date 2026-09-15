@@ -5,12 +5,32 @@ import altair as alt
 import pandas as pd
 import streamlit as st
 
+if "guilde" not in st.session_state:
+    st.session_state["guilde"] = "❤️Pandora⚔️"
+
 st.set_page_config(
     page_title="Suivi Guilde Pandora",
     page_icon="⚔️",
     layout="wide",
     initial_sidebar_state="collapsed",
 )
+
+# Masquer l'espace blanc inutile en haut de la page
+st.markdown(
+    """
+    <style>
+        /* Réduit la marge du bloc de contenu principal */
+        .block-container {
+            padding-top: 2rem;    /* Par défaut c'est environ 6rem, vous pouvez baisser à 1rem ou 2rem */
+            padding-bottom: 1rem;
+        }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+# pour memoire LIGNE LANCEMENT DANS TERMINAL = 
+# python -m streamlit run app_guilde_completeV2.py
 
 # -----------------------------------------------------------------------------
 # 1. SÉCURITÉ MOT DE PASSE (.streamlit/secrets.toml)
@@ -20,7 +40,7 @@ def verifier_mot_de_passe():
         st.session_state["authentifie"] = False
 
     if not st.session_state["authentifie"]:
-        st.title("🔒 Connexion à Pandora")
+        st.title(f"🔒 Connexion à {st.session_state['guilde']}")
         mot_de_passe_saisi = st.text_input("Mot de passe :", type="password")
         mot_de_passe_correct = st.secrets.get("PASSWORD", "Pandora2026")
 
@@ -312,6 +332,8 @@ try:
         [str(nom).strip() for nom in df_actifs[col_nom_membre].dropna().unique()]
     )
 
+    st.subheader(st.session_state['guilde'])
+
     tab_graph, tab_table = st.tabs(
         ["📈 Graphiques Membre (Grille 2x2)", "🏆 Tableau Comparatif Guilde"]
     )
@@ -319,6 +341,8 @@ try:
     # -------------------------------------------------------------------------
     # ONGLET 1 : GRAPHIQUES CHRONOLOGIQUES
     # -------------------------------------------------------------------------
+  
+
     with tab_graph:
         col_sel1, _ = st.columns([2, 4])
         with col_sel1:
